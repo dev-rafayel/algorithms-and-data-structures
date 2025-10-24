@@ -52,13 +52,12 @@ class LinkedList {
   }
 
   isEmpty() {
-    return this.#size === this.#MAGIC_ZERO;
+    return this.#size === 0;
   }
 
   clear() {
     this.#head = null;
-    this.#size = this.#MAGIC_ZERO;
-    return true;
+    this.#size = 0;
   }
 
   // === Main operations ===
@@ -258,7 +257,8 @@ class LinkedList {
   }
 
   sort(compareFn) {
-    const comparator = typeof compareFn === "function" ? compareFn : (a, b) => a - b;
+    const comparator =
+      typeof compareFn === "function" ? compareFn : (a, b) => a - b;
 
     const splitList = (node) => {
       let slowPtr = node;
@@ -403,4 +403,4 @@ function testDoublyLinkedList() {
   }, 2800);
 }
 
-testDoublyLinkedList();
+// testDoublyLinkedList(); 

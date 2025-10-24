@@ -133,7 +133,7 @@ class DArray {
   }
 
   clear() {
-    return (this.#size = 0);
+    return this.#arr = [];
   }
 
   // Element Access

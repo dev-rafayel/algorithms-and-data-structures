@@ -8,15 +8,14 @@ class Node {
 class LinkedList {
   #head = null;
   #size = 0;
-  #magic_zero = 0;
 
   constructor(iterables) {
     if (!iterables) return;
 
-    if (iterables && typeof iterables[Symbol.iterator] !== "function") {
+    if (iterables && typeof iterables[Symbol.iterator] !== 'function') {
       iterables = new Array(iterables);
     }
-    this.#head = null;
+    this.#head = iterables[0];
   }
 
   // iterator
@@ -24,25 +23,33 @@ class LinkedList {
     let current = this.#head;
     return {
       next() {
-        if (current) {
-          console.log(current);
-          current = current.next;
-        } else {
-          setTimeout(() => {
-            throw new Error("Segmentation fault: (core dumped)");
-          });
-        }
+        if (!current) return { done: true };
+        const value = current.data;
+        current = current.next;
+        return { value, done: true };
       },
+      [Symbol.iterator]() {
+        return this;
+      }
     };
   }
 
+  getHead() {
+    if (!this.#head) return null;
+    return this.#head;
+  }
+
+  printf(head) {
+    console.log(head);
+    if (head) return (head.data);
+  }
   // Capacity & Size
   size() {
     return this.#size;
   }
 
   isEmpty() {
-    return this.#size === this.#magic_zero;
+    return this.#size === 0;
   }
 
   clear() {
@@ -257,73 +264,83 @@ class LinkedList {
   }
 }
 
-function testLinkedList() {
-  const list = new LinkedList();
-
-  console.log("=== Testing LinkedList ===");
-
-  console.log("\nAdding elements at the end via push_back:");
-  [10, 20, 30, 40, 50].forEach((v) => list.push_back(v));
-  printList(list);
-
-  console.log("\nAdding elements at the front via push_front(5):");
-  list.push_front(5);
-  printList(list);
-
-  console.log("\nDeleting first element via pop_front():");
-  list.pop_front();
-  printList(list);
-
-  console.log("\nDeleting last element via pop_back():");
-  list.pop_back();
-  printList(list);
-
-  console.log("\nAccess to element via at(2):");
-  console.log(list.at(2)?.data);
-
-  console.log("\nInsert the element via insert(2, 99):");
-  list.insert(2, 99);
-  printList(list);
-
-  console.log("\nDeleting the element via erase(1):");
-  list.erase(1);
-  printList(list);
-
-  console.log("\nDeleting all values '99':");
-  list.remove(99);
-  printList(list);
-
-  console.log("\nChecking reverse():");
-  list.reverse();
-  printList(list);
-
-  console.log("\nAdding some elements for sorting:");
-  list.push_back(3);
-  list.push_back(1);
-  list.push_back(2);
-  printList(list);
-
-  console.log("\nSorting list:");
-  list.sort();
-  printList(list);
-
-  console.log("\nCleaning via clear():");
-  list.clear();
-  printList(list);
-
-  console.log("\nChecking isEmpty():", list.isEmpty());
-  console.log("List size:", list.size());
-  console.log("✅ All tests passed!");
+const list = new LinkedList([1, 2, 3, 4, 5])
+list.printf(list.getHead());
+list.push_back(10)
+list.push_back(20)
+list.push_back(30)
+console.log(list.size())
+for (const item of list) {
+  console.log(item);
 }
 
-function printList(list) {
-  let current = list.front();
-  const result = [];
-  while (current) {
-    result.push(current.data);
-    current = current.next;
-  }
-  console.log(`[ ${result.join(" → ")} ] (size: ${list.size()})`);
-}
+// function testLinkedList() {
+//   const list = new LinkedList();
 
-testLinkedList();
+//   console.log('=== Testing LinkedList ===');
+
+//   console.log('\nAdding elements at the end via push_back:');
+//   [10, 20, 30, 40, 50].forEach((v) => list.push_back(v));
+//   printList(list);
+
+//   console.log('\nAdding elements at the front via push_front(5):');
+//   list.push_front(5);
+//   printList(list);
+
+//   console.log('\nDeleting first element via pop_front():');
+//   list.pop_front();
+//   printList(list);
+
+//   console.log('\nDeleting last element via pop_back():');
+//   list.pop_back();
+//   printList(list);
+
+//   console.log('\nAccess to element via at(2):');
+//   console.log(list.at(2)?.data);
+
+//   console.log('\nInsert the element via insert(2, 99):');
+//   list.insert(2, 99);
+//   printList(list);
+
+//   console.log('\nDeleting the element via erase(1):');
+//   list.erase(1);
+//   printList(list);
+
+//   console.log("\nDeleting all values '99':");
+//   list.remove(99);
+//   printList(list);
+
+//   console.log('\nChecking reverse():');
+//   list.reverse();
+//   printList(list);
+
+//   console.log('\nAdding some elements for sorting:');
+//   list.push_back(3);
+//   list.push_back(1);
+//   list.push_back(2);
+//   printList(list);
+
+//   console.log('\nSorting list:');
+//   list.sort();
+//   printList(list);
+
+//   console.log('\nCleaning via clear():');
+//   list.clear();
+//   printList(list);
+
+//   console.log('\nChecking isEmpty():', list.isEmpty());
+//   console.log('List size:', list.size());
+//   console.log('✅ All tests passed!');
+// }
+
+// function printList(list) {
+//   let current = list.front();
+//   const result = [];
+//   while (current) {
+//     result.push(current.data);
+//     current = current.next;
+//   }
+//   console.log(`[ ${result.join(' → ')} ] (size: ${list.size()})`);
+// }
+
+// testLinkedList();
